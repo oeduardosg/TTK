@@ -152,6 +152,7 @@
   <div class="tagline rainbow">graphic design is my passion</div>
   <div class="chips" style="justify-content:center">
     <span class="chip" id="netChip">🔌 desconectado</span>
+    <button class="btn" id="disconnectBtn" style="--b:#ff5c5c; padding:2px 14px; font-size:.95rem" hidden>🔌 Desconectar carteira</button>
     <span class="chip" id="votingChip" hidden></span>
   </div>
 </header>
@@ -360,6 +361,8 @@ function confetti(){
 /* ---------- carteira ---------- */
 async function connect(silent=false){
   if(!window.ethereum){ if(!silent) toast('Não achei a MetaMask. Instale a extensão e recarregue!','bad'); return; }
+  if(silent && store.get('turing.disconnected') === '1') return;   // usuário desconectou: não reconecta sozinho
+  if(!silent) store.set('turing.disconnected', '');
   try{
     S.browser = new ethers.BrowserProvider(window.ethereum);
     if(!silent) await S.browser.send('eth_requestAccounts', []);
@@ -372,9 +375,18 @@ async function connect(silent=false){
     const net = await S.browser.getNetwork();
     $('#netChip').textContent = '🦊 ' + short(S.account) + ' • rede ' + net.chainId;
     $('#netChip').className = 'chip good';
+    $('#disconnectBtn').hidden = false;
     if(S.addr) await loadContract(S.addr, S.src || 'carregado antes');
     renderViews();
   }catch(e){ toast(errMsg(e),'bad'); }
+}
+
+/* A MetaMask não tem um "disconnect" oficial: revogamos a permissão do site (quando suportado)
+   e guardamos um aviso para não reconectar sozinho ao recarregar. */
+async function disconnect(){
+  store.set('turing.disconnected', '1');
+  try{ await window.ethereum?.request({method:'wallet_revokePermissions', params:[{eth_accounts:{}}]}); }catch{}
+  location.reload();
 }
 
 async function switchToHardhat(){
@@ -678,6 +690,7 @@ S.addr = DEFAULT_CONTRACT; S.src = DEFAULT_SRC;   // não guardamos mais o últi
 $('#addr').placeholder = DEFAULT_CONTRACT;
 
 $('#connectBtn').onclick = () => connect(false);
+$('#disconnectBtn').onclick = disconnect;
 $('#netBtn').onclick = switchToHardhat;
 $('#loadBtn').onclick = () => loadContract($('#addr').value, 'endereço manual');
 $('#reloadBtn').onclick = () => autoLoad();
