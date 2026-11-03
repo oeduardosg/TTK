@@ -165,15 +165,12 @@
       <p class="me" id="contractStatus" style="font-size:1.1rem">🔎 Procurando o contrato...</p>
       <p class="hint" id="contractSrc"></p>
       <div class="row2">
-        <button class="btn" id="reloadBtn" style="--b:#00e5ff">Procurar de novo</button>
+        <button class="btn" id="reloadBtn" style="--b:#00e5ff">Voltar ao contrato padrão</button>
         <button class="btn" id="netBtn" style="--b:#fff200">Trocar para rede Hardhat</button>
       </div>
-      <details>
-        <summary>Usar um endereço manualmente</summary>
-        <p class="hint">Só precisa disso se o contrato não for achado sozinho (por exemplo, em uma rede pública).</p>
-        <input type="text" id="addr" placeholder="0x..." spellcheck="false" autocomplete="off" aria-label="Endereço do contrato">
-        <button class="btn" id="loadBtn" style="--b:#00e5ff; margin-top:10px">Carregar este endereço</button>
-      </details>
+      <label class="lbl" for="addr">Ou procure outro contrato manualmente</label>
+      <input type="text" id="addr" placeholder="0x..." spellcheck="false" autocomplete="off">
+      <button class="btn" id="loadBtn" style="--b:#00e5ff; margin-top:10px">Carregar este endereço</button>
       <details>
         <summary>Editar lista de codinomes</summary>
         <p class="hint">O contrato não lista os usuários, então o front guarda os codinomes dos alunos aqui. Separe por vírgula (sem a professora).</p>
@@ -289,9 +286,9 @@
 const PROFESSOR = 'roberta';                                   // fica fora do voto e do ranking
 const DEFAULT_STUDENTS = ['nome1','nome2','nome3','nome4','nome5']; // troque pelos codinomes reais
 const RPC = 'http://127.0.0.1:8545';                           // leitura sem carteira (Hardhat node)
-const SYMBOL = 'TTK';                                          // usado para reconhecer o contrato Turing
-// Arquivos que um script de deploy pode gerar ao lado desta página (opcional):
-const DEPLOY_FILES = ['./deployment.json','./contract-address.json','./deployed_addresses.json'];
+// Contrato carregado SEMPRE que a página abre (endereço do 1º deploy da conta #0 do Hardhat).
+const DEFAULT_CONTRACT = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+const DEFAULT_SRC = 'endereço padrão (fixo no código)';
 const ABI = [
   "function owner() view returns (address)",
   "function professor() view returns (address)",
@@ -397,93 +394,52 @@ async function switchToHardhat(){
 }
 
 /* ---------- contrato ---------- */
-async function loadContract(addr, source='manual'){
+const withTimeout = (p, ms=5000) => Promise.race([p, new Promise((_,rej) => setTimeout(() => rej(new Error('timeout')), ms))]);
+const hardhatRpc = () => new ethers.JsonRpcProvider(RPC, 31337, {staticNetwork: ethers.Network.from(31337)});
+// true = tem contrato, false = não tem, null = não consegui perguntar (node fora do ar?)
+async function hasCode(provider, addr){
+  try{ return (await withTimeout(provider.getCode(addr))) !== '0x'; }catch{ return null; }
+}
+function setStatus(main, sub=''){ $('#contractStatus').textContent = main; $('#contractSrc').textContent = sub; }
+
+async function loadContract(addr, source='endereço manual'){
   addr = (addr||'').trim();
   if(!ethers.isAddress(addr)){ toast('Isso não parece um endereço de contrato.','bad'); return false; }
   stopRanking();
-  const provider = S.browser || new ethers.JsonRpcProvider(RPC);
-  try{
-    const code = await provider.getCode(addr);
-    if(code === '0x'){ toast('Não existe contrato nesse endereço. Rede errada ou node reiniciado?','bad'); return false; }
-  }catch(e){
-    toast('Não consegui falar com a blockchain. O node do Hardhat está rodando?','bad'); return false;
+  setStatus('🔎 Procurando o contrato...', short(addr));
+
+  // 1º tenta pela rede da carteira; se não tiver nada lá, tenta direto no node do Hardhat
+  let provider = null, walletOnOtherNet = false, rpcAnswered = true;
+  if(S.browser && await hasCode(S.browser, addr) === true) provider = S.browser;
+  else{
+    const rpc = hardhatRpc();
+    const r = await hasCode(rpc, addr);
+    if(r === true){ provider = rpc; walletOnOtherNet = !!S.browser; }
+    rpcAnswered = r !== null;
   }
-  S.provider = provider; S.addr = addr; S.src = source; store.set('turing.addr', addr);
+  if(!provider){
+    setStatus('❌ Contrato não encontrado em ' + short(addr),
+      rpcAnswered
+        ? 'Não há contrato nesse endereço. Se você reiniciou o node, faça o deploy de novo (o endereço padrão só vale para o 1º deploy da conta #0).'
+        : 'Não consegui falar com o node do Hardhat. Ele está rodando (npx hardhat node)?');
+    return false;
+  }
+
+  S.provider = provider; S.addr = addr; S.src = source;
   S.contract = new ethers.Contract(addr, ABI, provider);
-  S.writer = S.signer ? S.contract.connect(S.signer) : null;
-  $('#addr').value = addr;
-  $('#contractStatus').textContent = '✅ Contrato carregado: ' + short(addr);
-  $('#contractSrc').textContent = 'Encontrado: ' + source;
+  S.writer = (S.signer && !walletOnOtherNet) ? S.contract.connect(S.signer) : null;
+  setStatus('✅ Contrato carregado: ' + short(addr), 'Origem: ' + source);
   await refreshAll();
   startRanking();
+  if(walletOnOtherNet){
+    toast('Sua carteira está em outra rede. Pedindo para trocar para a Hardhat...');
+    switchToHardhat();   // ao trocar, a página recarrega sozinha
+  }
   return true;
 }
 
-/* ---------- achar o contrato sozinho ---------- */
-const isTuring = async (provider, addr) => {
-  try{
-    if(await provider.getCode(addr) === '0x') return false;
-    return (await new ethers.Contract(addr, ABI, provider).symbol()) === SYMBOL;
-  }catch{ return false; }
-};
-
-async function fromUrlParam(){
-  const a = new URLSearchParams(location.search).get('contract');
-  return a && ethers.isAddress(a) ? a : null;
-}
-async function fromDeployFile(){
-  for(const f of DEPLOY_FILES){
-    try{
-      const r = await fetch(f, {cache:'no-store'}); if(!r.ok) continue;
-      const found = [];
-      (function walk(v,k=''){
-        if(typeof v === 'string' && ethers.isAddress(v)) found.push([k,v]);
-        else if(v && typeof v === 'object') for(const [kk,vv] of Object.entries(v)) walk(vv, kk);
-      })(await r.json());
-      const hit = found.find(([k]) => /turing/i.test(k)) || found[0];
-      if(hit) return hit[1];
-    }catch{ /* arquivo não existe: segue o jogo */ }
-  }
-  return null;
-}
-// Procura, no node local, o contrato Turing mais recente: testa os endereços que cada
-// conta do node criou (getCreateAddress) e reconhece o contrato pelo symbol().
-async function fromLocalNode(){
-  try{
-    const rpc = new ethers.JsonRpcProvider(RPC, undefined, {staticNetwork:true});
-    const accounts = await rpc.send('eth_accounts', []);
-    for(const acc of accounts){
-      const n = await rpc.getTransactionCount(acc);
-      for(let nonce = n - 1; nonce >= Math.max(0, n - 25); nonce--){
-        const cand = ethers.getCreateAddress({from:acc, nonce});
-        if(await isTuring(rpc, cand)) return cand;
-      }
-    }
-  }catch{ /* sem node local */ }
-  return null;
-}
-
-async function autoLoad(){
-  $('#contractStatus').textContent = '🔎 Procurando o contrato...';
-  const checker = S.browser || new ethers.JsonRpcProvider(RPC);
-  const tries = [
-    ['link (?contract=...)', fromUrlParam],
-    ['arquivo de deploy',    fromDeployFile],
-    ['node local do Hardhat', fromLocalNode],
-    ['último endereço usado', async () => store.get('turing.addr')]
-  ];
-  for(const [label, fn] of tries){
-    const a = await fn();
-    if(!a || !ethers.isAddress(a)) continue;
-    if(label.startsWith('último') && !(await isTuring(checker, a))) continue;
-    if(await loadContract(a, label)) return true;
-    // achou no node local mas a carteira está em outra rede: troca (a página recarrega sozinha)
-    if(label.startsWith('node local') && S.browser) await switchToHardhat();
-  }
-  $('#contractStatus').textContent = '❌ Contrato não encontrado';
-  $('#contractSrc').textContent = 'O node do Hardhat está rodando e o contrato foi implantado? Se estiver em outra rede, use o endereço manual.';
-  return false;
-}
+/* sempre começa pelo contrato fixo no código */
+const autoLoad = () => loadContract(DEFAULT_CONTRACT, DEFAULT_SRC);
 
 async function refreshAll(){
   if(!S.contract) return;
@@ -600,7 +556,7 @@ function renderViews(){
 
 /* ---------- enviar transações ---------- */
 async function send(label, fn, onOk){
-  if(!S.writer) return toast('Conecte a carteira primeiro.','bad');
+  if(!S.writer) return toast(S.account ? 'Sua carteira está em outra rede. Clique em "Trocar para rede Hardhat".' : 'Conecte a carteira primeiro.','bad');
   document.body.classList.add('busy');
   try{
     toast(label);
@@ -718,7 +674,8 @@ document.querySelectorAll('.rainbow').forEach(el => {
 
 S.students = loadStudents();
 $('#namesInput').value = S.students.join(', ');
-$('#addr').value = store.get('turing.addr') || '';
+S.addr = DEFAULT_CONTRACT; S.src = DEFAULT_SRC;   // não guardamos mais o último endereço: sempre abre no padrão
+$('#addr').placeholder = DEFAULT_CONTRACT;
 
 $('#connectBtn').onclick = () => connect(false);
 $('#netBtn').onclick = switchToHardhat;
@@ -741,7 +698,7 @@ document.querySelectorAll('input[name=mode]').forEach(r => r.onchange = () => {
 
 (async () => {
   await connect(true);                         // reconecta sozinho se a MetaMask já autorizou
-  if(!S.contract) await autoLoad();            // acha e carrega o contrato sem ninguém colar nada
+  if(!S.contract) await autoLoad();            // carrega o contrato padrão sem ninguém colar nada
   renderViews();
 })();
 </script>
