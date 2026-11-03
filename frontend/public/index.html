@@ -1,43 +1,749 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Hardhat React Dapp"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Turing Token - graphic design is my passion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink:#ff2bd6; --yellow:#fff200; --cyan:#00e5ff; --lime:#7cff00;
+    --orange:#ff8a00; --purple:#7a1fff; --ink:#1a0033; --paper:#fffbe0;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; padding:0 0 60px; color:var(--ink); font-size:18px; line-height:1.4;
+    font-family:"Comic Sans MS","Comic Sans","Comic Neue",cursive;
+    background-color:var(--pink);
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Cpolygon points='22,6 27,18 40,18 29,26 33,39 22,31 11,39 15,26 4,18 17,18' fill='%23fff200' stroke='%23ff2bd6' stroke-width='2'/%3E%3Ccircle cx='68' cy='64' r='5' fill='white'/%3E%3Ccircle cx='72' cy='20' r='3' fill='%2300e5ff'/%3E%3C/svg%3E"),
+      linear-gradient(135deg,#ff2bd6 0%,#7a1fff 25%,#00b8d4 50%,#7cff00 75%,#fff200 100%);
+    background-attachment:fixed;
+    cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpolygon points='16,2 20,12 31,12 22,19 25,30 16,23 7,30 10,19 1,12 12,12' fill='%23fff200' stroke='%231a0033' stroke-width='2'/%3E%3C/svg%3E") 16 16, auto;
+  }
+  button,select,input,label,summary{cursor:pointer}
+  input[type=text],input[type=number]{cursor:text}
+  :focus-visible{outline:4px dashed var(--ink); outline-offset:3px; box-shadow:0 0 0 8px var(--yellow)}
+  [hidden]{display:none !important}
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>Hardhat + React App = Dapp</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+  /* ---------- marquee + construction ---------- */
+  .marquee{background:var(--ink); color:var(--yellow); overflow:hidden; white-space:nowrap; border-bottom:5px double var(--cyan); font-weight:700}
+  .marquee span{display:inline-block; padding:6px 0 6px 100%; animation:scroll 26s linear infinite}
+  @keyframes scroll{to{transform:translateX(-100%)}}
+  .construction{
+    text-align:center; font-weight:700; padding:6px; color:var(--ink);
+    background:repeating-linear-gradient(-45deg,var(--yellow) 0 18px,var(--ink) 18px 36px);
+  }
+  .construction b{background:var(--yellow); padding:2px 12px; border:3px solid var(--ink)}
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+  /* ---------- header ---------- */
+  header.top{max-width:1040px; margin:0 auto; padding:10px 16px 0; text-align:center}
+  .wordart{width:100%; max-width:780px; height:auto; filter:drop-shadow(6px 6px 0 var(--ink))}
+  .tagline{
+    display:inline-block; margin:-6px 0 6px; padding:8px 22px; font-size:clamp(1.3rem,4vw,2.2rem); font-weight:700;
+    background:var(--ink); border:5px ridge var(--cyan); transform:rotate(-2deg);
+    text-shadow:3px 3px 0 #000; box-shadow:8px 8px 0 rgba(26,0,51,.55);
+  }
+  .tagline span{display:inline-block}
+  .blink{animation:blink 1s steps(2,start) infinite}
+  @keyframes blink{to{visibility:hidden}}
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-  </body>
+  /* ---------- layout ---------- */
+  main{max-width:1040px; margin:0 auto; padding:14px 16px}
+  .layout{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:26px; align-items:start; margin-top:22px}
+  .stack{display:grid; gap:26px}
+  @media (max-width:820px){ .layout{grid-template-columns:minmax(0,1fr)} }
+
+  .win{background:var(--paper); border:5px ridge var(--c,#ff8a00); box-shadow:9px 9px 0 var(--ink)}
+  .win:nth-child(odd){transform:rotate(-.5deg)} .win:nth-child(even){transform:rotate(.5deg)}
+  .tb{
+    display:flex; justify-content:space-between; align-items:center; gap:8px; padding:6px 10px; color:#fff; font-weight:700;
+    background:linear-gradient(90deg,var(--t1,#d100b0),var(--t2,#5b00d6)); text-shadow:2px 2px 0 var(--ink);
+  }
+  .tb h2{margin:0; font-size:1.1rem}
+  .tb i{display:inline-block; width:22px; height:22px; margin-left:3px; background:#d4d0c8; border:3px outset #fff; color:var(--ink); font-style:normal; font-size:.8rem; line-height:16px; text-align:center; text-shadow:none}
+  .win .in{padding:16px}
+  .win p{margin:.2em 0 .8em}
+
+  /* ---------- forms ---------- */
+  label.lbl{display:block; font-weight:700; margin:12px 0 4px}
+  select,input[type=text],input[type=number]{
+    width:100%; font:inherit; padding:9px 10px; color:var(--ink); background:#fff; border:4px inset #b9a7ff;
+  }
+  .btn{
+    font:inherit; font-weight:700; font-size:1.05rem; padding:10px 18px; color:var(--ink);
+    background:var(--b,var(--lime)); border:4px outset var(--b,var(--lime)); text-shadow:1px 1px 0 rgba(255,255,255,.6);
+  }
+  .btn:active{border-style:inset}
+  .btn[disabled]{filter:grayscale(1) opacity(.6); cursor:not-allowed}
+  .btn.big{width:100%; margin-top:16px; font-size:1.3rem; padding:14px}
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px}
+  .amt{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+  .amt input{position:absolute; opacity:0; pointer-events:none}
+  .amt label{display:block; text-align:center; font-weight:700; padding:12px 6px; background:var(--cyan); border:4px outset var(--cyan)}
+  .amt input:checked + label{background:var(--yellow); border-style:inset; transform:rotate(-2deg) scale(1.05)}
+  .amt input:focus-visible + label{outline:4px dashed var(--ink); outline-offset:3px}
+  .hint{font-size:.9rem; opacity:.85}
+
+  /* ---------- chips / status ---------- */
+  .chips{display:flex; flex-wrap:wrap; gap:8px; margin:6px 0}
+  .chip{display:inline-block; padding:3px 12px; border:3px solid var(--ink); background:var(--cyan); font-weight:700; font-size:.95rem}
+  .chip.good{background:var(--lime)} .chip.bad{background:#ff5c5c} .chip.warn{background:var(--yellow)} .chip.admin{background:var(--orange)}
+  .me{font-size:1.5rem; font-weight:700; margin:0}
+  .odo{display:inline-flex; gap:3px; margin:6px 0}
+  .odo b{background:#000; color:#39ff14; border:3px inset #555; padding:2px 8px; font-size:1.6rem; font-family:"Courier New",monospace; text-shadow:0 0 8px #39ff14}
+
+  /* ---------- ranking ---------- */
+  .modes{display:grid; gap:6px; margin-bottom:12px}
+  .modes label{display:flex; gap:8px; align-items:center; padding:6px 10px; border:3px dashed var(--purple); background:#fff}
+  .modes input{width:20px; height:20px; accent-color:var(--pink)}
+  ol.rank{list-style:none; margin:0; padding:0; display:grid; gap:10px}
+  .rk{display:grid; grid-template-columns:48px minmax(0,1fr) auto; gap:8px 10px; align-items:center; padding:8px 10px; background:#fff; border:4px solid var(--rc,var(--purple)); box-shadow:4px 4px 0 var(--ink)}
+  .rk .medal{font-size:1.7rem; text-align:center}
+  .rk .nm{font-weight:700; overflow-wrap:anywhere}
+  .rk .pts{font-weight:700; font-size:1.4rem}
+  .rk .bar{grid-column:2 / 4; height:16px; background:#eee; border:3px inset #ccc}
+  .rk .bar b{display:block; height:100%; background:linear-gradient(90deg,var(--pink),var(--orange),var(--yellow),var(--lime),var(--cyan)); transition:width .6s}
+  .rk.pop{animation:pop .9s}
+  @keyframes pop{30%{transform:scale(1.07) rotate(-1.5deg); background:var(--yellow)}}
+  .rk.first{--rc:var(--orange); background:#fff7b0}
+  .updated{font-size:.85rem; margin-top:10px}
+
+  /* ---------- toasts + confetti ---------- */
+  #toasts{position:fixed; left:12px; right:12px; bottom:12px; display:grid; gap:8px; justify-items:center; z-index:50; pointer-events:none}
+  .toast{max-width:640px; padding:10px 16px; font-weight:700; background:var(--yellow); border:4px ridge var(--pink); box-shadow:6px 6px 0 var(--ink)}
+  .toast.bad{background:#ff8a8a} .toast.ok{background:var(--lime)}
+  .confetti{position:fixed; top:-40px; font-size:28px; z-index:60; pointer-events:none; animation:fall 2.2s ease-in forwards}
+  @keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+  .busy .btn{pointer-events:none; filter:grayscale(1)}
+
+  footer{text-align:center; margin-top:34px; font-weight:700}
+  footer .stamp{display:inline-block; padding:6px 14px; background:var(--ink); color:var(--cyan); border:4px ridge var(--yellow)}
+  details{margin-top:14px} summary{font-weight:700}
+
+  @media (prefers-reduced-motion:reduce){
+    .marquee span{animation:none; padding-left:12px}
+    .blink,.rk.pop{animation:none}
+    .win:nth-child(odd),.win:nth-child(even){transform:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="marquee" aria-hidden="true"><span>✨ BEM-VINDO(A) À MINHA HOMEPAGE ✨ vote nos seus colegas e ganhe Turings ✨ melhor visualizado no Netscape Navigator 4.0 em 800x600 ✨ NÃO ESQUEÇA DE ASSINAR O LIVRO DE VISITAS ✨</span></div>
+<div class="construction"><b>🚧 ESTA PÁGINA ESTÁ SEMPRE EM CONSTRUÇÃO 🚧</b></div>
+
+<header class="top">
+  <svg class="wordart" viewBox="0 0 800 230" role="img" aria-label="Turing Token">
+    <defs>
+      <linearGradient id="rb" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ff2bd6"/><stop offset=".3" stop-color="#ff8a00"/>
+        <stop offset=".55" stop-color="#fff200"/><stop offset=".8" stop-color="#7cff00"/><stop offset="1" stop-color="#00e5ff"/>
+      </linearGradient>
+      <path id="arc" d="M30,185 Q400,-30 770,185"/>
+    </defs>
+    <text font-family="Comic Sans MS, Comic Sans, Comic Neue, cursive" font-weight="700" font-size="104"
+          fill="url(#rb)" stroke="#1a0033" stroke-width="7" paint-order="stroke" text-anchor="middle">
+      <textPath href="#arc" startOffset="50%" textLength="690" lengthAdjust="spacingAndGlyphs">TURING TOKEN</textPath>
+    </text>
+  </svg>
+  <div class="tagline rainbow">graphic design is my passion</div>
+  <div class="chips" style="justify-content:center">
+    <span class="chip" id="netChip">🔌 desconectado</span>
+    <span class="chip" id="votingChip" hidden></span>
+  </div>
+</header>
+
+<main id="app">
+
+  <!-- contrato -->
+  <section class="win" style="--c:#00e5ff;--t1:#0087b3;--t2:#5b00d6">
+    <div class="tb"><h2>💾 CONTRATO.EXE</h2><span aria-hidden="true"><i>_</i><i>□</i><i>x</i></span></div>
+    <div class="in">
+      <p class="me" id="contractStatus" style="font-size:1.1rem">🔎 Procurando o contrato...</p>
+      <p class="hint" id="contractSrc"></p>
+      <div class="row2">
+        <button class="btn" id="reloadBtn" style="--b:#00e5ff">Procurar de novo</button>
+        <button class="btn" id="netBtn" style="--b:#fff200">Trocar para rede Hardhat</button>
+      </div>
+      <details>
+        <summary>Usar um endereço manualmente</summary>
+        <p class="hint">Só precisa disso se o contrato não for achado sozinho (por exemplo, em uma rede pública).</p>
+        <input type="text" id="addr" placeholder="0x..." spellcheck="false" autocomplete="off" aria-label="Endereço do contrato">
+        <button class="btn" id="loadBtn" style="--b:#00e5ff; margin-top:10px">Carregar este endereço</button>
+      </details>
+      <details>
+        <summary>Editar lista de codinomes</summary>
+        <p class="hint">O contrato não lista os usuários, então o front guarda os codinomes dos alunos aqui. Separe por vírgula (sem a professora).</p>
+        <input type="text" id="namesInput" aria-label="Codinomes dos alunos" spellcheck="false">
+        <button class="btn" id="namesBtn" style="--b:#ff8a00; margin-top:10px">Salvar lista</button>
+      </details>
+    </div>
+  </section>
+
+  <div class="layout">
+    <div class="stack">
+
+      <!-- conectar -->
+      <section class="win" id="connectBox" style="--c:#7cff00;--t1:#008f3a;--t2:#0077b6">
+        <div class="tb"><h2>🦊 ENTRAR NA FESTA</h2><span aria-hidden="true"><i>_</i><i>□</i><i>x</i></span></div>
+        <div class="in">
+          <p>Conecte a MetaMask para votar. Sem carteira você ainda pode espiar o ranking.</p>
+          <button class="btn big" id="connectBtn" style="--b:#7cff00">CONECTAR CARTEIRA</button>
+        </div>
+      </section>
+
+      <!-- quem sou eu -->
+      <section class="win" id="whoBox" style="--c:#ff2bd6;--t1:#d100b0;--t2:#ff6a00" hidden>
+        <div class="tb"><h2>🪪 EU</h2><span aria-hidden="true"><i>_</i><i>□</i><i>x</i></span></div>
+        <div class="in">
+          <p class="me" id="meName">...</p>
+          <div class="chips" id="meChips"></div>
+          <p>Meus Turings: <b id="meBal">0</b> &nbsp;|&nbsp; Votos dados: <b id="meVotes">0</b></p>
+          <p class="hint" id="meAddr"></p>
+        </div>
+      </section>
+
+      <!-- votar -->
+      <section class="win" id="voteBox" style="--c:#ff8a00;--t1:#ff6a00;--t2:#d100b0" hidden>
+        <div class="tb"><h2>🗳️ VOTAR!!!</h2><span aria-hidden="true"><i>_</i><i>□</i><i>x</i></span></div>
+        <div class="in">
+          <label class="lbl" for="voteName">Em quem você vota?</label>
+          <select id="voteName"></select>
+          <label class="lbl" id="amtLbl">Quantos Turings?</label>
+          <div class="amt" role="radiogroup" aria-labelledby="amtLbl">
+            <input type="radio" name="amt" id="amt1" value="1" checked><label for="amt1">⭐ 1 Turing</label>
+            <input type="radio" name="amt" id="amt2" value="2"><label for="amt2">🌟 2 Turings</label>
+          </div>
+          <button class="btn big" id="voteBtn" style="--b:#7cff00">VOTAR</button>
+          <p class="hint" id="voteHint"></p>
+        </div>
+      </section>
+
+      <!-- desconhecido -->
+      <section class="win" id="strangerBox" style="--c:#ff5c5c;--t1:#c40000;--t2:#7a1fff" hidden>
+        <div class="tb"><h2>⛔ ACESSO NEGADO</h2><span aria-hidden="true"><i>_</i><i>□</i><i>x</i></span></div>
+        <div class="in">
+          <p><b>YOUR NAME ISN'T IN THE BOOK!</b></p>
+          <p>Essa carteira não tem codinome no contrato. Peça para a professora cadastrar o seu endereço, ou troque de conta na MetaMask.</p>
+        </div>
+      </section>
+
+      <!-- admin -->
+      <section class="win" id="adminBox" style="--c:#7a1fff;--t1:#5b00d6;--t2:#00b8d4" hidden>
+        <div class="tb"><h2>👑 SUPERUSUÁRIO</h2><span aria-hidden="true"><i>_</i><i>□</i><i>x</i></span></div>
+        <div class="in">
+          <label class="lbl" for="issueName">Emitir Turings para quem?</label>
+          <select id="issueName"></select>
+          <label class="lbl" for="issueAmt">Quantidade de Turings</label>
+          <input type="number" id="issueAmt" min="1" step="1" value="1" inputmode="numeric">
+          <button class="btn big" id="issueBtn" style="--b:#ff8a00">EMITIR TOKENS</button>
+          <div class="row2" style="margin-top:18px">
+            <button class="btn" id="onBtn" style="--b:#7cff00">🟢 votingOn</button>
+            <button class="btn" id="offBtn" style="--b:#ff5c5c">🔴 votingOff</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="stack">
+      <!-- contador -->
+      <section class="win" style="--c:#fff200;--t1:#222;--t2:#555">
+        <div class="tb"><h2>🔢 CONTADOR DE VISITAS</h2><span aria-hidden="true"><i>_</i><i>□</i><i>x</i></span></div>
+        <div class="in" style="text-align:center">
+          <p style="margin:0">Turings em circulação:</p>
+          <div class="odo" id="odo" aria-live="polite"><b>0</b></div>
+        </div>
+      </section>
+
+      <!-- ranking -->
+      <section class="win" style="--c:#00e5ff;--t1:#00a86b;--t2:#0077b6">
+        <div class="tb"><h2>🏆 RANKING DOS TURINGS</h2><span aria-hidden="true"><i>_</i><i>□</i><i>x</i></span></div>
+        <div class="in">
+          <fieldset style="border:0;padding:0;margin:0">
+            <legend class="lbl" style="padding:0">Como atualizar o ranking?</legend>
+            <div class="modes">
+              <label><input type="radio" name="mode" value="events" checked> ⚡ Eventos (escuta o Transfer)</label>
+              <label><input type="radio" name="mode" value="poll"> 💪 Braçal (balanceOf a cada 3s)</label>
+            </div>
+          </fieldset>
+          <ol class="rank" id="rank"><li class="hint">Carregue o contrato para ver o ranking.</li></ol>
+          <p class="updated" id="updated"></p>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <footer>
+    <span class="stamp">Esta página foi feita com ♥ e muito <span class="blink">Comic Sans</span></span>
+  </footer>
+</main>
+
+<div id="toasts" role="status" aria-live="polite"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
+<script>
+/* =====================  CONFIG (mexa aqui)  ===================== */
+const PROFESSOR = 'roberta';                                   // fica fora do voto e do ranking
+const DEFAULT_STUDENTS = ['nome1','nome2','nome3','nome4','nome5']; // troque pelos codinomes reais
+const RPC = 'http://127.0.0.1:8545';                           // leitura sem carteira (Hardhat node)
+const SYMBOL = 'TTK';                                          // usado para reconhecer o contrato Turing
+// Arquivos que um script de deploy pode gerar ao lado desta página (opcional):
+const DEPLOY_FILES = ['./deployment.json','./contract-address.json','./deployed_addresses.json'];
+const ABI = [
+  "function owner() view returns (address)",
+  "function professor() view returns (address)",
+  "function symbol() view returns (string)",
+  "function users(string) view returns (address)",
+  "function addresses(address) view returns (string)",
+  "function balanceOf(address) view returns (uint256)",
+  "function totalSupply() view returns (uint256)",
+  "function voting() view returns (bool)",
+  "function hasVoted(address,address) view returns (bool)",
+  "function voteAmount(address) view returns (uint256)",
+  "function vote(string,uint256)",
+  "function issueToken(string,uint256)",
+  "function votingOn()",
+  "function votingOff()",
+  "event Transfer(address indexed from, address indexed to, uint256 value)"
+];
+/* ================================================================ */
+
+const $ = s => document.querySelector(s);
+const ZERO = '0x0000000000000000000000000000000000000000';
+const store = {
+  get(k){ try{ return localStorage.getItem(k); }catch{ return null; } },
+  set(k,v){ try{ localStorage.setItem(k,v); }catch{} }
+};
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const S = {
+  browser:null, signer:null, account:null, provider:null, contract:null, writer:null, addr:null,
+  students:[], book:{}, myName:'', isAdmin:false, voting:null,
+  mode:'events', bal:{}, seen:new Set(), fromBlock:0, pollBal:{}, prev:{}, timer:null
+};
+
+/* ---------- utilidades ---------- */
+function loadStudents(){
+  try{
+    const saved = JSON.parse(store.get('turing.students') || 'null');
+    if(Array.isArray(saved) && saved.length) return saved;
+  }catch{}
+  return [...DEFAULT_STUDENTS];
+}
+const short = a => a ? a.slice(0,6)+'...'+a.slice(-4) : '';
+const same  = (a,b) => !!a && !!b && a.toLowerCase() === b.toLowerCase();
+
+function errMsg(e){
+  if(e?.code === 'ACTION_REJECTED' || e?.code === 4001) return 'Você cancelou na MetaMask.';
+  const raw = e?.reason || e?.info?.error?.data?.message || e?.info?.error?.message || e?.shortMessage || e?.message || String(e);
+  return String(raw).replace(/^execution reverted:?\s*/i,'').replace(/^VM Exception while processing transaction: reverted with reason string\s*/i,'').replace(/^'|'$/g,'') || 'Deu ruim.';
+}
+function toast(msg, kind=''){
+  const t = document.createElement('div');
+  t.className = 'toast ' + kind; t.textContent = msg;
+  $('#toasts').append(t);
+  setTimeout(()=>t.remove(), 6500);
+}
+function confetti(){
+  if(reduceMotion) return;
+  const bits = ['⭐','🌈','✨','🎉','🦄','💖','🌟','🎨'];
+  for(let i=0;i<36;i++){
+    const s = document.createElement('span');
+    s.className = 'confetti'; s.textContent = bits[i % bits.length];
+    s.style.left = Math.random()*100 + 'vw';
+    s.style.animationDelay = (Math.random()*.6) + 's';
+    document.body.append(s);
+    setTimeout(()=>s.remove(), 3200);
+  }
+}
+
+/* ---------- carteira ---------- */
+async function connect(silent=false){
+  if(!window.ethereum){ if(!silent) toast('Não achei a MetaMask. Instale a extensão e recarregue!','bad'); return; }
+  try{
+    S.browser = new ethers.BrowserProvider(window.ethereum);
+    if(!silent) await S.browser.send('eth_requestAccounts', []);
+    const accs = await S.browser.send('eth_accounts', []);
+    if(!accs.length){ S.browser = null; return; }
+    S.signer = await S.browser.getSigner();
+    S.account = await S.signer.getAddress();
+    window.ethereum.on?.('accountsChanged', ()=>location.reload());
+    window.ethereum.on?.('chainChanged', ()=>location.reload());
+    const net = await S.browser.getNetwork();
+    $('#netChip').textContent = '🦊 ' + short(S.account) + ' • rede ' + net.chainId;
+    $('#netChip').className = 'chip good';
+    if(S.addr) await loadContract(S.addr, S.src || 'carregado antes');
+    renderViews();
+  }catch(e){ toast(errMsg(e),'bad'); }
+}
+
+async function switchToHardhat(){
+  if(!window.ethereum) return toast('Instale a MetaMask primeiro.','bad');
+  try{
+    await window.ethereum.request({method:'wallet_switchEthereumChain', params:[{chainId:'0x7a69'}]});
+  }catch(e){
+    if(e.code === 4902 || e?.data?.originalError?.code === 4902){
+      try{
+        await window.ethereum.request({method:'wallet_addEthereumChain', params:[{
+          chainId:'0x7a69', chainName:'Hardhat Local', rpcUrls:['http://127.0.0.1:8545'],
+          nativeCurrency:{name:'Ether', symbol:'ETH', decimals:18}
+        }]});
+      }catch(e2){ toast(errMsg(e2),'bad'); }
+    }else toast(errMsg(e),'bad');
+  }
+}
+
+/* ---------- contrato ---------- */
+async function loadContract(addr, source='manual'){
+  addr = (addr||'').trim();
+  if(!ethers.isAddress(addr)){ toast('Isso não parece um endereço de contrato.','bad'); return false; }
+  stopRanking();
+  const provider = S.browser || new ethers.JsonRpcProvider(RPC);
+  try{
+    const code = await provider.getCode(addr);
+    if(code === '0x'){ toast('Não existe contrato nesse endereço. Rede errada ou node reiniciado?','bad'); return false; }
+  }catch(e){
+    toast('Não consegui falar com a blockchain. O node do Hardhat está rodando?','bad'); return false;
+  }
+  S.provider = provider; S.addr = addr; S.src = source; store.set('turing.addr', addr);
+  S.contract = new ethers.Contract(addr, ABI, provider);
+  S.writer = S.signer ? S.contract.connect(S.signer) : null;
+  $('#addr').value = addr;
+  $('#contractStatus').textContent = '✅ Contrato carregado: ' + short(addr);
+  $('#contractSrc').textContent = 'Encontrado: ' + source;
+  await refreshAll();
+  startRanking();
+  return true;
+}
+
+/* ---------- achar o contrato sozinho ---------- */
+const isTuring = async (provider, addr) => {
+  try{
+    if(await provider.getCode(addr) === '0x') return false;
+    return (await new ethers.Contract(addr, ABI, provider).symbol()) === SYMBOL;
+  }catch{ return false; }
+};
+
+async function fromUrlParam(){
+  const a = new URLSearchParams(location.search).get('contract');
+  return a && ethers.isAddress(a) ? a : null;
+}
+async function fromDeployFile(){
+  for(const f of DEPLOY_FILES){
+    try{
+      const r = await fetch(f, {cache:'no-store'}); if(!r.ok) continue;
+      const found = [];
+      (function walk(v,k=''){
+        if(typeof v === 'string' && ethers.isAddress(v)) found.push([k,v]);
+        else if(v && typeof v === 'object') for(const [kk,vv] of Object.entries(v)) walk(vv, kk);
+      })(await r.json());
+      const hit = found.find(([k]) => /turing/i.test(k)) || found[0];
+      if(hit) return hit[1];
+    }catch{ /* arquivo não existe: segue o jogo */ }
+  }
+  return null;
+}
+// Procura, no node local, o contrato Turing mais recente: testa os endereços que cada
+// conta do node criou (getCreateAddress) e reconhece o contrato pelo symbol().
+async function fromLocalNode(){
+  try{
+    const rpc = new ethers.JsonRpcProvider(RPC, undefined, {staticNetwork:true});
+    const accounts = await rpc.send('eth_accounts', []);
+    for(const acc of accounts){
+      const n = await rpc.getTransactionCount(acc);
+      for(let nonce = n - 1; nonce >= Math.max(0, n - 25); nonce--){
+        const cand = ethers.getCreateAddress({from:acc, nonce});
+        if(await isTuring(rpc, cand)) return cand;
+      }
+    }
+  }catch{ /* sem node local */ }
+  return null;
+}
+
+async function autoLoad(){
+  $('#contractStatus').textContent = '🔎 Procurando o contrato...';
+  const checker = S.browser || new ethers.JsonRpcProvider(RPC);
+  const tries = [
+    ['link (?contract=...)', fromUrlParam],
+    ['arquivo de deploy',    fromDeployFile],
+    ['node local do Hardhat', fromLocalNode],
+    ['último endereço usado', async () => store.get('turing.addr')]
+  ];
+  for(const [label, fn] of tries){
+    const a = await fn();
+    if(!a || !ethers.isAddress(a)) continue;
+    if(label.startsWith('último') && !(await isTuring(checker, a))) continue;
+    if(await loadContract(a, label)) return true;
+    // achou no node local mas a carteira está em outra rede: troca (a página recarrega sozinha)
+    if(label.startsWith('node local') && S.browser) await switchToHardhat();
+  }
+  $('#contractStatus').textContent = '❌ Contrato não encontrado';
+  $('#contractSrc').textContent = 'O node do Hardhat está rodando e o contrato foi implantado? Se estiver em outra rede, use o endereço manual.';
+  return false;
+}
+
+async function refreshAll(){
+  if(!S.contract) return;
+  try{
+    await refreshBook();
+    await Promise.all([refreshIdentity(), refreshVoting(), refreshSupply()]);
+    await renderPickers();
+    renderViews();
+  }catch(e){ toast(errMsg(e),'bad'); }
+}
+
+async function refreshBook(){
+  const names = [PROFESSOR, ...S.students];
+  const addrs = await Promise.all(names.map(n => S.contract.users(n)));
+  S.book = {}; names.forEach((n,i)=> S.book[n] = addrs[i] === ZERO ? null : addrs[i]);
+}
+
+async function refreshIdentity(){
+  if(!S.account){ S.myName=''; S.isAdmin=false; return; }
+  const [name, owner, bal, votes] = await Promise.all([
+    S.contract.addresses(S.account), S.contract.owner(),
+    S.contract.balanceOf(S.account), S.contract.voteAmount(S.account)
+  ]);
+  S.myName = name;
+  S.isAdmin = await checkAdmin(owner);
+  $('#meName').textContent = name ? name : '(sem codinome)';
+  $('#meBal').textContent = bal.toString();
+  $('#meVotes').textContent = votes.toString();
+  $('#meAddr').textContent = S.account;
+  $('#meChips').innerHTML = '';
+  const chip = (txt, cls) => { const c = document.createElement('span'); c.className='chip '+cls; c.textContent=txt; $('#meChips').append(c); };
+  chip(S.isAdmin ? '👑 superusuário' : '🎓 usuário comum', S.isAdmin ? 'admin' : '');
+}
+
+// Quem manda é o modifier onlyOwner do contrato. Em vez de adivinhar comparando endereços,
+// simulamos (sem gastar gás, sem enviar nada) uma função de admin a partir da conta atual.
+async function checkAdmin(owner){
+  try{
+    await S.contract.votingOn.staticCall({from:S.account});
+    return true;
+  }catch(e){
+    if(/not allowed/i.test(errMsg(e))) return false;
+  }
+  // simulação indisponível: cai para a comparação de endereços
+  let prof = null;
+  try{ prof = await S.contract.professor(); }catch{ prof = S.book[PROFESSOR]; }
+  return same(owner, S.account) || same(prof, S.account);
+}
+
+async function refreshVoting(){
+  let v = null;
+  S.noVotingFn = S.noVotingFn || {};
+  try{
+    if(S.noVotingFn[S.addr]) throw new Error('legacy');   // já sabemos que este contrato não tem voting(): não insiste
+    v = await S.contract.voting();
+  }
+  catch{
+    S.noVotingFn[S.addr] = true;
+    // contratos antigos não tinham `voting` public: lê direto do storage (slot 8)
+    try{ v = BigInt(await S.provider.getStorage(S.addr, 8)) !== 0n; }catch{ v = null; }
+  }
+  S.voting = v;
+  const c = $('#votingChip'); c.hidden = false;
+  if(v === true){ c.textContent = '🟢 votação aberta'; c.className = 'chip good'; }
+  else if(v === false){ c.textContent = '🔴 votação fechada'; c.className = 'chip bad'; }
+  else { c.textContent = '❔ estado da votação desconhecido'; c.className = 'chip warn'; }
+}
+
+async function refreshSupply(){
+  const t = (await S.contract.totalSupply()).toString().padStart(6,'0');
+  $('#odo').innerHTML = '';
+  for(const d of t){ const b = document.createElement('b'); b.textContent = d; $('#odo').append(b); }
+}
+
+async function renderPickers(){
+  const vs = $('#voteName'), is = $('#issueName');
+  vs.innerHTML = ''; is.innerHTML = '';
+  const voted = {};
+  if(S.account){
+    await Promise.all(S.students.map(async n => {
+      const a = S.book[n];
+      voted[n] = a ? await S.contract.hasVoted(S.account, a) : false;
+    }));
+  }
+  let available = 0;
+  for(const n of S.students){
+    const a = S.book[n];
+    const o2 = document.createElement('option'); o2.value = n;
+    o2.textContent = a ? n : n + ' (sem endereço)'; o2.disabled = !a;
+    is.append(o2);
+    if(n === S.myName) continue;                       // não vota em si mesmo
+    const o = document.createElement('option'); o.value = n;
+    o.textContent = !a ? n + ' (sem endereço)' : voted[n] ? n + ' ✔ já votou' : n;
+    o.disabled = !a || voted[n];
+    if(a && !voted[n]) available++;
+    vs.append(o);
+  }
+  const first = [...vs.options].find(o => !o.disabled); if(first) vs.value = first.value;
+  const firstI = [...is.options].find(o => !o.disabled); if(firstI) is.value = firstI.value;
+  const closed = S.voting === false;
+  $('#voteBtn').disabled = available === 0 || closed;
+  $('#voteHint').textContent = closed ? 'A votação está fechada. Espere a professora abrir.'
+    : available === 0 ? 'Você já votou em todo mundo. Cada pessoa só recebe um voto seu!' : '';
+}
+
+function renderViews(){
+  const conn = !!S.account, loaded = !!S.contract;
+  $('#connectBox').hidden  = conn;
+  $('#whoBox').hidden      = !(conn && loaded);
+  $('#voteBox').hidden     = !(conn && loaded && S.myName);
+  $('#strangerBox').hidden = !(conn && loaded && !S.myName && !S.isAdmin);
+  $('#adminBox').hidden    = !(conn && loaded && S.isAdmin);
+}
+
+/* ---------- enviar transações ---------- */
+async function send(label, fn, onOk){
+  if(!S.writer) return toast('Conecte a carteira primeiro.','bad');
+  document.body.classList.add('busy');
+  try{
+    toast(label);
+    const tx = await fn();
+    toast('Transação enviada. Esperando minerar...');
+    const rc = await tx.wait();
+    onOk?.();
+    await refreshAll();
+    if(S.mode === 'events') await catchUp(rc.blockNumber); else await poll();
+  }catch(e){ toast(errMsg(e),'bad'); }
+  finally{ document.body.classList.remove('busy'); }
+}
+
+const doVote = () => {
+  const name = $('#voteName').value;
+  const amt = BigInt(document.querySelector('input[name=amt]:checked').value);
+  if(!name) return toast('Escolha alguém para votar.','bad');
+  send(`Votando em ${name}...`, () => S.writer.vote(name, amt),
+       () => { confetti(); toast(`${name} ganhou ${amt} Turing${amt>1n?'s':''}!`,'ok'); });
+};
+const doIssue = () => {
+  const name = $('#issueName').value;
+  const raw = $('#issueAmt').value.trim();
+  if(!/^\d+$/.test(raw) || BigInt(raw) < 1n) return toast('A quantidade precisa ser um número inteiro maior que zero.','bad');
+  send(`Emitindo ${raw} Turings para ${name}...`, () => S.writer.issueToken(name, BigInt(raw)),
+       () => { confetti(); toast(`${raw} Turings emitidos para ${name}!`,'ok'); });
+};
+const doOn  = () => send('Abrindo a votação...',  () => S.writer.votingOn(),  () => toast('Votação aberta!','ok'));
+const doOff = () => send('Fechando a votação...', () => S.writer.votingOff(), () => toast('Votação fechada!','ok'));
+
+/* ---------- ranking ---------- */
+function stopRanking(){
+  clearInterval(S.timer); S.timer = null;
+  try{ S.contract?.removeAllListeners(); }catch{}
+}
+function startRanking(){
+  stopRanking();
+  S.bal = {}; S.seen = new Set(); S.fromBlock = 0; S.pollBal = {};
+  if(S.mode === 'poll'){ poll(); S.timer = setInterval(poll, 3000); }
+  else startEvents();
+}
+
+/* (i) forma braçal: pooling de balanceOf() */
+async function poll(){
+  try{
+    await Promise.all(S.students.map(async n => {
+      const a = S.book[n]; if(a) S.pollBal[n] = await S.contract.balanceOf(a);
+    }));
+    renderRanking();
+  }catch(e){ /* tenta de novo no próximo ciclo */ }
+}
+
+/* (ii) usando eventos: o ERC20 emite Transfer em todo _mint (from = 0x0) */
+function applyTransfer(from, to, value, id){
+  if(S.seen.has(id)) return; S.seen.add(id);
+  if(from !== ZERO){ const f = from.toLowerCase(); S.bal[f] = (S.bal[f] || 0n) - value; }
+  if(to !== ZERO){ const t = to.toLowerCase(); S.bal[t] = (S.bal[t] || 0n) + value; }
+}
+async function catchUp(fromBlock){
+  const logs = await S.contract.queryFilter(S.contract.filters.Transfer(), fromBlock ?? S.fromBlock, 'latest');
+  for(const l of logs){
+    applyTransfer(l.args[0], l.args[1], l.args[2], l.transactionHash + ':' + l.index);
+    S.fromBlock = Math.max(S.fromBlock, l.blockNumber);
+  }
+  renderRanking();
+}
+async function startEvents(){
+  try{
+    await catchUp(0);   // histórico completo (em rede pública, comece do bloco do deploy)
+    S.contract.on('Transfer', (from, to, value, ev) => {
+      applyTransfer(from, to, value, ev.log.transactionHash + ':' + ev.log.index);
+      S.fromBlock = Math.max(S.fromBlock, ev.log.blockNumber);
+      renderRanking();
+    });
+  }catch(e){ toast('Não consegui ler os eventos: ' + errMsg(e),'bad'); }
+}
+
+function renderRanking(){
+  const rows = S.students.filter(n => S.book[n]).map(n => ({
+    n, pts: S.mode === 'poll' ? (S.pollBal[n] ?? 0n) : (S.bal[S.book[n].toLowerCase()] ?? 0n)
+  }));
+  rows.sort((a,b) => (b.pts > a.pts ? 1 : b.pts < a.pts ? -1 : 0));
+  const max = rows.reduce((m,r) => r.pts > m ? r.pts : m, 0n);
+  const medals = ['🥇','🥈','🥉'], ol = $('#rank');
+  ol.innerHTML = '';
+  if(!rows.length){ ol.innerHTML = '<li class="hint">Nenhum aluno com endereço cadastrado.</li>'; return; }
+  rows.forEach((r,i) => {
+    const li = document.createElement('li');
+    li.className = 'rk' + (i === 0 && max > 0n ? ' first' : '');
+    if(S.prev[r.n] !== undefined && S.prev[r.n] !== r.pts) li.classList.add('pop');
+    S.prev[r.n] = r.pts;
+    const pct = max > 0n ? Number(r.pts * 100n / max) : 0;
+    li.innerHTML = '<span class="medal"></span><span class="nm"></span><span class="pts"></span><div class="bar"><b></b></div>';
+    li.querySelector('.medal').textContent = medals[i] || (i+1) + 'º';
+    li.querySelector('.nm').textContent = r.n + (r.n === S.myName ? ' (você)' : '');
+    li.querySelector('.pts').textContent = r.pts.toString() + ' ⭐';
+    li.querySelector('.bar b').style.width = pct + '%';
+    ol.append(li);
+  });
+  $('#updated').textContent = 'Atualizado às ' + new Date().toLocaleTimeString('pt-BR') +
+    (S.mode === 'poll' ? ' (lendo balanceOf)' : ' (ouvindo eventos Transfer)');
+  refreshSupply().catch(()=>{});
+}
+
+/* ---------- init ---------- */
+document.querySelectorAll('.rainbow').forEach(el => {
+  const t = el.textContent; el.textContent = '';
+  [...t].forEach((c,i) => {
+    const s = document.createElement('span');
+    s.textContent = c === ' ' ? '\u00a0' : c;
+    s.style.color = `hsl(${(i*37)%360} 100% 62%)`;
+    el.append(s);
+  });
+});
+
+S.students = loadStudents();
+$('#namesInput').value = S.students.join(', ');
+$('#addr').value = store.get('turing.addr') || '';
+
+$('#connectBtn').onclick = () => connect(false);
+$('#netBtn').onclick = switchToHardhat;
+$('#loadBtn').onclick = () => loadContract($('#addr').value, 'endereço manual');
+$('#reloadBtn').onclick = () => autoLoad();
+$('#namesBtn').onclick = async () => {
+  const list = $('#namesInput').value.split(',').map(s => s.trim()).filter(Boolean).filter(s => s !== PROFESSOR);
+  if(!list.length) return toast('Coloque pelo menos um codinome.','bad');
+  S.students = list; store.set('turing.students', JSON.stringify(list));
+  if(S.contract){ await refreshAll(); startRanking(); }
+  toast('Lista de codinomes salva!','ok');
+};
+$('#voteBtn').onclick = doVote;
+$('#issueBtn').onclick = doIssue;
+$('#onBtn').onclick = doOn;
+$('#offBtn').onclick = doOff;
+document.querySelectorAll('input[name=mode]').forEach(r => r.onchange = () => {
+  S.mode = r.value; if(r.checked && S.contract) startRanking();
+});
+
+(async () => {
+  await connect(true);                         // reconecta sozinho se a MetaMask já autorizou
+  if(!S.contract) await autoLoad();            // acha e carrega o contrato sem ninguém colar nada
+  renderViews();
+})();
+</script>
+</body>
 </html>
